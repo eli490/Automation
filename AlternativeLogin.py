@@ -4,7 +4,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
 # Replace with actual login credentials
 username = "elvin.opak"  # Replace with actual username
 password = "Sumova@24"  # Replace with actual password
@@ -45,24 +44,33 @@ def login_to_application():
         login_button = WebDriverWait(driver, 30).until(
             EC.element_to_be_clickable((By.XPATH, "//*[@id='main-login-container-wrapper']"))
         )
-        login_button.click()
+        driver.execute_script("arguments[0].click();", login_button)
+        print("Login button clicked via JavaScript.")
 
-        print("Login button clicked.")
+        # Optionally, wait for the URL to change after clicking the login button
+        WebDriverWait(driver, 60).until(EC.url_contains("otp"))  # Modify as per the expected URL pattern
+        print("Navigated to OTP verification page.")
 
-        # Wait for some indication of a successful login, like the presence of a dashboard element
-        WebDriverWait(driver, 60).until(
-            EC.visibility_of_element_located((By.XPATH, "//*[@id='main-login-container-wrapper']"))
+        # Alternatively, wait for the OTP verification page to load by checking for a specific element
+        otp_element = WebDriverWait(driver, 60).until(
+            EC.visibility_of_element_located((By.XPATH, "//*[contains(text(),'OTP')]"))
+            # Replace with the correct XPath
         )
+        print("OTP verification page loaded.")
 
-        # Print success message
-        print("Login successful.")
+        # Print the current URL to verify navigation
+        print("Current URL:", driver.current_url)
 
-        # Keep the browser open for a while to observe the result
-        input("Press Enter to close the browser...")
+        # Take a screenshot after clicking the login button to see if the page looks as expected
+        driver.save_screenshot('after_login_click.png')
+        print("Screenshot saved.")
 
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:
+        # Keep the browser open for observation
+        input("Press Enter to close the browser...")
+
         # Close the browser
         driver.quit()
 
