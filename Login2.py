@@ -19,15 +19,15 @@ def login_to_application():
     driver = webdriver.Chrome(service=service_obj)
 
     # Open the web application
-    driver.get("https://qa.data.smartapplicationsgroup.com/connect/login")  # Replace with the actual URL of the
-    # login page
+    driver.get(
+        "https://qa.data.smartapplicationsgroup.com/connect/login")  # Replace with the actual URL of the login page
 
     # Maximize the browser window
     driver.maximize_window()
 
     try:
         # Wait for the username field to be present and visible
-        WebDriverWait(driver, 90).until(
+        WebDriverWait(driver, 60).until(
             EC.visibility_of_element_located((By.XPATH, "//*[@id='username']"))
         )
 
@@ -39,19 +39,45 @@ def login_to_application():
         password_field.send_keys(password)
 
         # Wait for the login button to be clickable and then click it
-        login_button = WebDriverWait(driver, 80).until(
+        login_button = WebDriverWait(driver, 40).until(
             EC.element_to_be_clickable((By.XPATH, "//*[@type='submit']"))  # Replace with the correct XPath
         )
         login_button.click()
 
-        # Wait for some indication of a successful login, like the presence of a dashboard element
+        # Wait for the dropdown to be clickable
+        dropdown_element = WebDriverWait(driver, 40).until(
+            EC.element_to_be_clickable((By.XPATH, "//*[@id='provider_key']"))
+            # Replace with the actual XPath of the dropdown
+        )
+
+        # Click the dropdown to reveal options
+        dropdown_element.click()
+
+        # Wait for the options list to become visible
+        options_list = WebDriverWait(driver, 40).until(
+            EC.visibility_of_element_located((By.XPATH, "//*[@id='provider_key_list']"))
+            # Replace with the XPath that correctly identifies the dropdown options list
+        )
+
+        # Click on the specific dropdown option
+        dropdown_option = options_list.find_element(By.XPATH, "//*[@id='provider_key_list_0']")
+        dropdown_option.click()
+
+        # Wait for the proceed button to be clickable and then click it
+        proceed_button = WebDriverWait(driver, 40).until(
+            EC.element_to_be_clickable((By.XPATH, "//*[@type='submit']"))
+            # Replace with the correct XPath of the proceed button
+        )
+        proceed_button.click()
+
+        # Wait for the OTP verification page to load
         WebDriverWait(driver, 20).until(
             EC.visibility_of_element_located((By.XPATH, "//*[contains(text(), 'Login OTP Verification')]"))
-            # Replace with the correct XPath or other identifier
+            # Replace with the correct XPath or other identifier on the OTP page
         )
 
         # Print success message
-        print("Login successful.")
+        print("OTP verification page loaded successfully.")
 
     except Exception as e:
         print(f"An error occurred: {e}")
