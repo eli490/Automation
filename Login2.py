@@ -57,10 +57,15 @@ def login_to_application():
         options_list = WebDriverWait(driver, 40).until(
             EC.visibility_of_element_located((By.XPATH, "//*[@id='provider_key_list']"))
             # Replace with the XPath that correctly identifies the dropdown options list
+
         )
+        options_list.click()
 
         # Click on the specific dropdown option
-        dropdown_option = options_list.find_element(By.XPATH, "//*[@id='provider_key_list_0']")
+        dropdown_option = WebDriverWait(driver, 20).until(
+            EC.visibility_of_element_located((By.XPATH, "//*[@id='provider_key_list_0']"))  # Replace with the
+            # correct XPath for the dropdown option
+        )
         dropdown_option.click()
 
         # Wait for the proceed button to be clickable and then click it
