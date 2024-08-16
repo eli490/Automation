@@ -3,7 +3,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains
 import time
 
 # Replace with actual login credentials
@@ -56,18 +55,23 @@ def login_to_application():
         # Wait for the options list to become visible
         dropdown_options = WebDriverWait(driver, 40).until(
             EC.visibility_of_all_elements_located(
-                (By.XPATH, "//*[@id='provider_key_list_1']//div[contains(@class, 'ant-select-item-option-active')]"))
+                (By.XPATH, "//*[@id='provider_key_list_1']//div[contains(@class, 'ant-select-item-option')]")
+            )
         )
 
         # Ensure that dropdown options are available
         if dropdown_options:
             # Select the desired option; adjust the index as needed
             option_to_select = dropdown_options[0]  # Example: select the first option
-            actions = ActionChains(driver)
-            actions.move_to_element(option_to_select).click().perform()
+            option_to_select.click()
 
             # Wait a bit for the selection to register
             time.sleep(2)
+
+            # Wait for the dropdown to close
+            WebDriverWait(driver, 10).until(
+                EC.invisibility_of_element_located((By.XPATH, "//*[@id='provider_key_list_1']"))
+            )
         else:
             print("No dropdown options found.")
 
@@ -78,9 +82,10 @@ def login_to_application():
         driver.execute_script("arguments[0].scrollIntoView(true);", proceed_button)
 
         # Wait for the proceed button to be clickable and then click it
-        WebDriverWait(driver, 40).until(
+        proceed_button = WebDriverWait(driver, 40).until(
             EC.element_to_be_clickable((By.XPATH, "//*[@type='submit']"))
-        ).click()
+        )
+        proceed_button.click()
 
         # Wait for the OTP verification page to load
         WebDriverWait(driver, 20).until(

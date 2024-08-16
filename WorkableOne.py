@@ -4,7 +4,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-import time
 
 # Replace with actual login credentials
 username = "elvin.opak"
@@ -54,33 +53,23 @@ def login_to_application():
         dropdown_element.click()
 
         # Wait for the options list to become visible
-        dropdown_options = WebDriverWait(driver, 40).until(
-            EC.visibility_of_all_elements_located(
-                (By.XPATH, "//*[@id='provider_key_list_1']//div[contains(@class, 'ant-select-item-option-active')]"))
+        dropdown_option = WebDriverWait(driver, 40).until(
+            EC.element_to_be_clickable((By.XPATH, "//*[@id='provider_key']"))
         )
 
-        # Ensure that dropdown options are available
-        if dropdown_options:
-            # Select the desired option; adjust the index as needed
-            option_to_select = dropdown_options[0]  # Example: select the first option
-            actions = ActionChains(driver)
-            actions.move_to_element(option_to_select).click().perform()
+        # Use ActionChains to hover over and click the specific dropdown option
+        actions = ActionChains(driver)
+        actions.move_to_element(dropdown_option).click().perform()
 
-            # Wait a bit for the selection to register
-            time.sleep(2)
-        else:
-            print("No dropdown options found.")
-
-        # Scroll to the proceed button if necessary
-        proceed_button = WebDriverWait(driver, 40).until(
-            EC.visibility_of_element_located((By.XPATH, "//*[@type='submit']"))
-        )
-        driver.execute_script("arguments[0].scrollIntoView(true);", proceed_button)
+        # Ensure the selected value is now in the dropdown field
+        selected_value = driver.find_element(By.XPATH, "//*[@id='provider_key_list_1']").get_attribute("value")
+        print(f"Selected provider key: {selected_value}")
 
         # Wait for the proceed button to be clickable and then click it
-        WebDriverWait(driver, 40).until(
+        proceed_button = WebDriverWait(driver, 40).until(
             EC.element_to_be_clickable((By.XPATH, "//*[@type='submit']"))
-        ).click()
+        )
+        proceed_button.click()
 
         # Wait for the OTP verification page to load
         WebDriverWait(driver, 20).until(
