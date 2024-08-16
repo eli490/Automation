@@ -3,11 +3,11 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains  # Import ActionChains for advanced interactions
+from selenium.webdriver.common.action_chains import ActionChains
 
 # Replace with actual login credentials
-username = "elvin.opak"  # Replace with actual username
-password = "Sumova@24"  # Replace with actual password
+username = "elvin.opak"
+password = "Sumova@24"
 
 # Specify the path to the ChromeDriver executable
 chrome_driver_path = "C:/Users/elvin.opak/SeleniumProject/Driver/chromedriver.exe"
@@ -53,17 +53,18 @@ def login_to_application():
         dropdown_element.click()
 
         # Wait for the options list to become visible
-        options_list = WebDriverWait(driver, 40).until(
+        WebDriverWait(driver, 40).until(
             EC.visibility_of_element_located((By.XPATH, "//*[@id='provider_key_list']"))
         )
 
-        # Use ActionChains to move to and click the specific dropdown option
+        # Use ActionChains to hover over and click the specific dropdown option
         dropdown_option = WebDriverWait(driver, 20).until(
             EC.visibility_of_element_located((By.XPATH, "//*[@id='provider_key_list_0']"))
         )
-        ActionChains(driver).move_to_element(dropdown_option).click().perform()
+        actions = ActionChains(driver)
+        actions.move_to_element(dropdown_option).click().perform()
 
-        # Verify that the dropdown selection is now reflected in the input field
+        # Ensure the selected value is now in the dropdown field
         selected_value = driver.find_element(By.XPATH, "//*[@id='provider_key']").get_attribute("value")
         print(f"Selected provider key: {selected_value}")
 
