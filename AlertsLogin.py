@@ -6,8 +6,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 import time
 
 # Replace with actual login credentials
-username = "elvin.opak@smartapplicationsgroup.com"
-password = "Sumova@26"
+username = ""
+password = ""
 
 # Specify the path to the ChromeDriver executable
 chrome_driver_path = "C:/Users/elvin.opak/SeleniumProject/Driver/chromedriver.exe"
@@ -20,7 +20,7 @@ def login_to_application():
 
     try:
         # Open the web application
-        driver.get("https://qa.data.smartapplicationsgroup.com:30489/login")
+        driver.get("https://example.com")
 
         # Maximize the browser window
         driver.maximize_window()
@@ -41,10 +41,18 @@ def login_to_application():
         )
         login_button.click()
 
-        # Wait for the hamburger button to be visible and clickable
+        # Wait for the welcome message to appear
+        WebDriverWait(driver, 20).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//*[contains(text(), 'Welcome to the Alerts Portal, Please proceed to the different "
+                           "pages')]")
+            )
+        )
+
+        # Wait for the hamburger button to be visible and clickable using CSS selector
+        # Target the SVG element or its parent
         hamburger_button = WebDriverWait(driver, 20).until(
-            EC.element_to_be_clickable((By.XPATH, "//*[@id='button']"))
-            # Update with actual XPath
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "svg.mud-icon-root.mud-svg-icon"))
         )
         hamburger_button.click()
 
