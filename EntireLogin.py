@@ -1,9 +1,9 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
+from selenium.webdriver.support.ui import WebDriverWait
 
 # Replace with actual login credentials
 username = "elvin.opak"
@@ -54,32 +54,20 @@ def login_to_application():
 
         # Wait for the options list to become visible
         dropdown_options = WebDriverWait(driver, 40).until(
-            EC.visibility_of_all_elements_located(
-                (By.XPATH, "//*[@id='provider_key_list_1']//div[contains(@class, 'ant-select-item-option')]")
-            )
+            EC.presence_of_all_elements_located((By.XPATH, "//div[contains(@class, 'ant-select-item-option-content')]"))
         )
 
-        # Ensure that dropdown options are available
-        if dropdown_options:
-            # Select the desired option; adjust the index as needed
-            option_to_select = dropdown_options[0]  # Example: select the first option
-            option_to_select.click()
+        # Print out all available options in the dropdown
+        for option in dropdown_options:
+            print("Dropdown option:", option.text)
 
-            # Wait a bit for the selection to register
-            time.sleep(2)
+        # Select the specific option using ActionChains (example selecting the first one)
+        actions = ActionChains(driver)
+        actions.move_to_element(dropdown_options[0]).click().perform()
 
-            # Wait for the dropdown to close
-            WebDriverWait(driver, 10).until(
-                EC.invisibility_of_element_located((By.XPATH, "//*[@id='provider_key_list_1']"))
-            )
-        else:
-            print("No dropdown options found.")
-
-        # Scroll to the proceed button if necessary
-        proceed_button = WebDriverWait(driver, 40).until(
-            EC.visibility_of_element_located((By.XPATH, "//*[@type='submit']"))
-        )
-        driver.execute_script("arguments[0].scrollIntoView(true);", proceed_button)
+        # Print the selected value
+        selected_value = dropdown_options[0].text
+        print(f"Selected provider key: {selected_value}")
 
         # Wait for the proceed button to be clickable and then click it
         proceed_button = WebDriverWait(driver, 40).until(
