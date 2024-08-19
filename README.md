@@ -8,4 +8,4 @@ This repository serves as my sandbox for experimenting with Selenium. It include
 
 ### **What’s Inside**
 
-Beginner Scripts: Simple examples that helped me get started with basic Selenium concepts like element locators, interactions, and assertions.
+Beginner Scripts: Simple examples that helped me get started with basic Selenium concepts.
