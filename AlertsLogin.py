@@ -20,7 +20,7 @@ def login_to_application():
 
     try:
         # Open the web application
-        driver.get("https://example.co")
+        driver.get("https://example.com")
 
         # Maximize the browser window
         driver.maximize_window()
