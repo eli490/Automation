@@ -67,11 +67,20 @@ def login_to_application():
         # Print success message for navigation pane
         print("Navigation pane displayed successfully.")
 
+        # Select the "Customer Alert Settings" menu item
+        customer_alert_settings = WebDriverWait(driver, 20).until(
+            EC.element_to_be_clickable((By.XPATH, "//div[contains(text(), 'Customer Alert Settings')]"))
+        )
+        customer_alert_settings.click()
+
+        # Print success message
+        print("Customer Alert Settings page loaded successfully.")
+
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:
         # Wait for a few seconds before closing to observe the result
-        time.sleep(5)
+        time.sleep(10)
         driver.quit()
 
 
