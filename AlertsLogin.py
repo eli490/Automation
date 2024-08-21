@@ -6,8 +6,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 import time
 
 # Replace with actual login credentials
-username = ""
-password = ""
+username = "elvin.opak@smartapplicationsgroup.com"
+password = "Sumova@26"
 
 # Specify the path to the ChromeDriver executable
 chrome_driver_path = "C:/Users/elvin.opak/SeleniumProject/Driver/chromedriver.exe"
@@ -20,7 +20,7 @@ def login_to_application():
 
     try:
         # Open the web application
-        driver.get("https://example.com")
+        driver.get("https://qa.data.smartapplicationsgroup.com:30489/login")
 
         # Maximize the browser window
         driver.maximize_window()
@@ -51,15 +51,16 @@ def login_to_application():
 
         # Wait for the hamburger button to be visible and clickable using its class
         hamburger_button = WebDriverWait(driver, 20).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, "mud-button-root.mud-icon-button"))
+            EC.element_to_be_clickable((By.XPATH, "//*[@type='button' and contains(@class, 'mud-button-root "
+                                                  "mud-icon-button mud-inherit-text hover:mud-inherit-hover "
+                                                  "mud-ripple mud-ripple-icon mud-icon-button-edge-start')]"))
         )
         hamburger_button.click()
 
         # Wait for the navigation pane to be visible after clicking the hamburger button
         WebDriverWait(driver, 20).until(
             EC.visibility_of_element_located(
-                (By.XPATH, "//*[contains(@class, 'class-for-navigation-pane')]")  # Replace with actual class or
-                # identifier for the navigation pane
+                (By.CLASS_NAME, "mud-drawer")
             )
         )
 
