@@ -20,7 +20,7 @@ def login_to_application():
     driver = webdriver.Chrome(service=service_obj)
 
     # Open the web application
-    driver.get("https://example.com")
+    driver.get("")
 
     # Maximize the browser window
     driver.maximize_window()

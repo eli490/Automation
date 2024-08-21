@@ -20,7 +20,7 @@ def login_to_application():
 
     try:
         # Open the web application
-        driver.get("https://example.com")
+        driver.get("https://qa.data.smartapplicationsgroup.com:30489/login")
 
         # Maximize the browser window
         driver.maximize_window()
@@ -50,14 +50,21 @@ def login_to_application():
         )
 
         # Wait for the hamburger button to be visible and clickable using CSS selector
-        # Target the SVG element or its parent
         hamburger_button = WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, "svg.mud-icon-root.mud-svg-icon"))
         )
         hamburger_button.click()
 
+        # Wait for the navigation pane to be visible after clicking the hamburger button
+        WebDriverWait(driver, 20).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//*[contains(@class, 'class-for-navigation-pane')]")  # Replace with actual class or
+                # identifier
+            )
+        )
+
         # Print success message for navigation pane
-        print("Hamburger button clicked, navigation pane displayed.")
+        print("Navigation pane displayed successfully.")
 
     except Exception as e:
         print(f"An error occurred: {e}")
