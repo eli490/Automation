@@ -68,13 +68,16 @@ def login_to_application():
         print("Navigation pane displayed successfully.")
 
         # Select the "Customer Alert Settings" menu item
-        customer_alert_settings = WebDriverWait(driver, 20).until(
+        customer_alert_settings = WebDriverWait(driver, 40).until(
             EC.element_to_be_clickable((By.XPATH, "//div[contains(text(), 'Customer Alert Settings')]"))
         )
         customer_alert_settings.click()
 
-        # Print success message
-        print("Customer Alert Settings page loaded successfully.")
+        # Select the "Create New" button
+        create_new_button = WebDriverWait(driver, 20).until(
+            EC.element_to_be_clickable((By.XPATH, "//button[normalize-space()='Create New']"))
+        )
+        create_new_button.click()
 
     except Exception as e:
         print(f"An error occurred: {e}")
