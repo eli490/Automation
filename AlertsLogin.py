@@ -20,7 +20,7 @@ def login_to_application():
 
     try:
         # Open the web application
-        driver.get("https://qa.data.smartapplicationsgroup.com:30489/login")
+        driver.get("https://example.co")
 
         # Maximize the browser window
         driver.maximize_window()
@@ -49,9 +49,9 @@ def login_to_application():
             )
         )
 
-        # Wait for the hamburger button to be visible and clickable using CSS selector
+        # Wait for the hamburger button to be visible and clickable using its class
         hamburger_button = WebDriverWait(driver, 20).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, "svg.mud-icon-root.mud-svg-icon"))
+            EC.element_to_be_clickable((By.CLASS_NAME, "mud-button-root.mud-icon-button"))
         )
         hamburger_button.click()
 
@@ -59,7 +59,7 @@ def login_to_application():
         WebDriverWait(driver, 20).until(
             EC.visibility_of_element_located(
                 (By.XPATH, "//*[contains(@class, 'class-for-navigation-pane')]")  # Replace with actual class or
-                # identifier
+                # identifier for the navigation pane
             )
         )
 
