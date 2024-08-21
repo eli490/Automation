@@ -6,8 +6,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 # Replace with actual login credentials
-username = "elvin.opak"
-password = "Sumova@24"
+username = ""
+password = ""
 
 # Specify the path to the ChromeDriver executable
 chrome_driver_path = "C:/Users/elvin.opak/SeleniumProject/Driver/chromedriver.exe"
@@ -19,8 +19,8 @@ def login_to_application():
     # Initialize the Chrome WebDriver with the specified Service
     driver = webdriver.Chrome(service=service_obj)
 
-    # Open the web application
-    driver.get("https://qa.data.smartapplicationsgroup.com/connect/login")
+    # Link to Web Application
+    driver.get("")
 
     # Maximize the browser window
     driver.maximize_window()
