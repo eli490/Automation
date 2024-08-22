@@ -76,6 +76,12 @@ def login_to_application():
         )
         create_new_button.click()
 
+        # Selecting a country from the list of the available countries
+        select_country = WebDriverWait(driver, 50).until(
+            EC.element_to_be_clickable((By.XPATH, "//*[@type = 'text' and contains(@class, 'mud-input-slot')]"))
+        )
+        select_country.click()
+
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:
