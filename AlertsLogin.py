@@ -9,6 +9,7 @@ import time
 # Replace with actual login credentials
 username = "elvin.opak@smartapplicationsgroup.com"
 password = "Sumova@26"
+customer_name = "TEST CUSTOMER 13"
 
 # Specify the path to the ChromeDriver executable
 chrome_driver_path = "C:/Users/elvin.opak/SeleniumProject/Driver/chromedriver.exe"
@@ -105,6 +106,26 @@ def login_to_application():
         # Print the selected value
         selected_value = options[0].text
         print(f"Selected country: {selected_value}")
+
+        # Wait for the Customer Name field to be visible
+        customer_name_field = WebDriverWait(driver, 40).until(
+            EC.visibility_of_element_located((By.XPATH, "//input[@class='mud-input-slot mud-input-root "
+                                                        "mud-input-root-outlined mud-input-root-adorned-end "
+                                                        "mud-select-input']"))
+        )
+
+        # Enter customer name details
+        customer_name_field.send_keys(customer_name)
+
+        # You may need to wait for the suggestions to appear
+        WebDriverWait(driver, 60).until(
+            EC.visibility_of_element_located((By.CLASS_NAME, "mud-popover-content"))
+        )
+
+        # Select the first suggestion using ActionChains
+        first_suggestion = driver.find_element(By.XPATH, "//div[contains(@class, 'mud-list-item') and text()"
+                                                         "='"+customer_name+"']")
+        actions.move_to_element(first_suggestion).click().perform()
 
     except Exception as e:
         print(f"An error occurred: {e}")
