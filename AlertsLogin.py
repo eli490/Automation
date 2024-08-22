@@ -7,9 +7,9 @@ from selenium.webdriver.common.action_chains import ActionChains
 import time
 
 # Replace with actual login credentials
-username = "elvin.opak@smartapplicationsgroup.com"
-password = "Sumova@26"
-customer_name = "TEST CUSTOMER 13"
+username = ""
+password = ""
+customer_name = ""
 
 # Specify the path to the ChromeDriver executable
 chrome_driver_path = "C:/Users/elvin.opak/SeleniumProject/Driver/chromedriver.exe"
@@ -22,7 +22,7 @@ def login_to_application():
 
     try:
         # Open the web application
-        driver.get("https://qa.data.smartapplicationsgroup.com:30489/login")
+        driver.get("")
 
         # Maximize the browser window
         driver.maximize_window()
@@ -107,19 +107,21 @@ def login_to_application():
         selected_value = options[0].text
         print(f"Selected country: {selected_value}")
 
-        # Wait for the Customer Name field to be visible
+        # Locate the Customer Name field next to the Select Country field using normalize-space
+        print("Locating the Customer Name field...")
         customer_name_field = WebDriverWait(driver, 40).until(
-            EC.visibility_of_element_located((By.XPATH, "//input[@class='mud-input-slot mud-input-root "
-                                                        "mud-input-root-outlined mud-input-root-adorned-end "
-                                                        "mud-select-input']"))
+            EC.presence_of_element_located((By.XPATH, "//label[normalize-space(text())='Customer "
+                                                      "Name']/following::input[@type='text' and contains(@class, "
+                                                      "'mud-input mud-input-outlined mud-input-adorned-end "
+                                                      "mud-select-input')]"))
         )
 
-        # Enter customer name details
+        print("Customer Name field located. Entering details...")
         customer_name_field.send_keys(customer_name)
 
         # You may need to wait for the suggestions to appear
         WebDriverWait(driver, 60).until(
-            EC.visibility_of_element_located((By.CLASS_NAME, "mud-popover-content"))
+            EC.visibility_of_element_located((By.CLASS_NAME, "mud-list mud-list-padding"))
         )
 
         # Select the first suggestion using ActionChains
