@@ -66,7 +66,7 @@ def login_to_application():
 
         # Select the "Customer Alert Settings" menu item
         customer_alert_settings = WebDriverWait(driver, 50).until(
-            EC.element_to_be_clickable((By.XPATH, "//div[contains(text(), 'Customer Alert Settings')]"))
+            EC.element_to_be_clickable((By.XPATH, "//div[contains(text(), 'Claim Alerts')]"))
         )
         customer_alert_settings.click()
 
