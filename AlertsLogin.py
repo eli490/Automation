@@ -82,6 +82,13 @@ def login_to_application():
         )
         select_dropdown.click()
 
+        # Wait for the navigation pane to be visible after clicking the hamburger button
+        WebDriverWait(driver, 50).until(
+            EC.visibility_of_element_located(
+                (By.CLASS_NAME, "mud-list")
+            )
+        )
+
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:
