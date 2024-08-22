@@ -76,11 +76,11 @@ def login_to_application():
         )
         create_new_button.click()
 
-        # Selecting a country from the list of the available countries
-        select_country = WebDriverWait(driver, 50).until(
+        # Selecting a dropdown that contains a list of countries
+        select_dropdown = WebDriverWait(driver, 50).until(
             EC.element_to_be_clickable((By.XPATH, "//*[@type = 'text' and contains(@class, 'mud-input-slot')]"))
         )
-        select_country.click()
+        select_dropdown.click()
 
     except Exception as e:
         print(f"An error occurred: {e}")
