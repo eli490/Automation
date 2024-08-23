@@ -103,6 +103,32 @@ def login_to_application():
                 print(f"Selected country: {option.text}")
                 break
 
+        # Select a customer from the autocomplete field
+        # Locate the autocomplete input field using a unique combination of attributes
+        autocomplete_input = WebDriverWait(driver, 50).until(
+            EC.element_to_be_clickable((By.XPATH, "//input[@autocomplete='mud-disabled-f2c6a153-50e0-4a25-bf84"
+                                                  "-6d5b657a19f9']"))
+        )
+        autocomplete_input.send_keys("TEST CUSTOMER 13")  # Replace with the partial name or input you want to
+        # search for
+
+        # Wait for the autocomplete suggestions to appear
+        suggestions = WebDriverWait(driver, 50).until(
+            EC.presence_of_all_elements_located((By.XPATH, "//li[contains(@class, 'mud-list-item')]"))  # Update with
+            # correct class or XPATH
+        )
+
+        # Print out all available suggestions
+        for suggestion in suggestions:
+            print("Suggestion:", suggestion.text)
+
+        # Select the desired suggestion
+        for suggestion in suggestions:
+            if "John Doe" in suggestion.text:  # Replace "John Doe" with the desired suggestion
+                suggestion.click()
+                print(f"Selected customer: {suggestion.text}")
+                break
+
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:
