@@ -114,7 +114,9 @@ def login_to_application():
 
         # Wait for the autocomplete suggestions to appear
         suggestions = WebDriverWait(driver, 50).until(
-            EC.presence_of_all_elements_located((By.XPATH, "//li[contains(@class, 'mud-list-item')]"))  # Update with
+            EC.presence_of_all_elements_located((By.XPATH, "//input[contains(@class, "
+                                                           "'mud-disabled-2783efe2-ecb0-4ad0-b6b3-1fcbebc7a93a')]"))
+            # Update with
             # correct class or XPATH
         )
 
@@ -124,7 +126,7 @@ def login_to_application():
 
         # Select the desired suggestion
         for suggestion in suggestions:
-            if "John Doe" in suggestion.text:  # Replace "John Doe" with the desired suggestion
+            if "TEST CUSTOMER 13" in suggestion.text:  # Replace with the desired suggestion
                 suggestion.click()
                 print(f"Selected customer: {suggestion.text}")
                 break
