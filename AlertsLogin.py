@@ -9,7 +9,7 @@ import time
 # Replace with actual login credentials
 username = "elvin.opak@smartapplicationsgroup.com"
 password = "Sumova@26"
-customer_name = "TEST CUSTOMER 13"
+
 
 # Specify the path to the ChromeDriver executable
 chrome_driver_path = "C:/Users/elvin.opak/SeleniumProject/Driver/chromedriver.exe"
@@ -106,28 +106,6 @@ def login_to_application():
         # Print the selected value
         selected_value = options[0].text
         print(f"Selected country: {selected_value}")
-
-        # Locate the Customer Name field next to the Select Country field using normalize-space
-        print("Locating the Customer Name field...")
-        customer_name_field = WebDriverWait(driver, 40).until(
-            EC.presence_of_element_located((By.XPATH, "//label[normalize-space(text())='Customer "
-                                                      "Name']/following::input[@type='text' and contains(@class, "
-                                                      "'mud-input mud-input-outlined mud-input-adorned-end "
-                                                      "mud-select-input')]"))
-        )
-
-        print("Customer Name field located. Entering details...")
-        customer_name_field.send_keys(customer_name)
-
-        # You may need to wait for the suggestions to appear
-        WebDriverWait(driver, 60).until(
-            EC.visibility_of_element_located((By.CLASS_NAME, "mud-list mud-list-padding"))
-        )
-
-        # Select the first suggestion using ActionChains
-        first_suggestion = driver.find_element(By.XPATH, "//div[contains(@class, 'mud-list-item') and text()"
-                                                         "='"+customer_name+"']")
-        actions.move_to_element(first_suggestion).click().perform()
 
     except Exception as e:
         print(f"An error occurred: {e}")
