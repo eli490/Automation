@@ -3,13 +3,11 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.action_chains import ActionChains
 import time
 
 # Replace with actual login credentials
 username = "elvin.opak@smartapplicationsgroup.com"
 password = "Sumova@26"
-
 
 # Specify the path to the ChromeDriver executable
 chrome_driver_path = "C:/Users/elvin.opak/SeleniumProject/Driver/chromedriver.exe"
@@ -48,7 +46,6 @@ def login_to_application():
             EC.visibility_of_element_located(
                 (By.XPATH,
                  "//*[contains(text(), 'Welcome to the Alerts Portal, Please proceed to the different pages')]")
-
             )
         )
 
@@ -58,14 +55,12 @@ def login_to_application():
                                         "//*[@type='button' and contains(@class, 'mud-button-root mud-icon-button "
                                         "mud-inherit-text hover:mud-inherit-hover mud-ripple mud-ripple-icon "
                                         "mud-icon-button-edge-start')]"))
-
         )
         hamburger_button.click()
 
         # Wait for the navigation pane to be visible after clicking the hamburger button
         WebDriverWait(driver, 50).until(
             EC.visibility_of_element_located((By.CLASS_NAME, "mud-drawer"))
-
         )
 
         # Select the "Customer Alert Settings" menu item
@@ -89,23 +84,24 @@ def login_to_application():
         # Wait for the countries' list to be visible
         WebDriverWait(driver, 50).until(
             EC.visibility_of_element_located((By.CLASS_NAME, "mud-list"))
-
         )
 
         # Get all dropdown options
-        options = driver.find_elements(By.XPATH, "//div[contains(@class, 'mud-list-item')]")
+        options = WebDriverWait(driver, 50).until(
+            EC.presence_of_all_elements_located((By.XPATH, "//div[contains(@class, 'mud-list-item')]"))
+        )
 
         # Print out all available options in the dropdown
         for option in options:
             print("Dropdown option:", option.text)
 
-        # Select the specific option using ActionChains (example selecting the first one)
-        actions = ActionChains(driver)
-        actions.move_to_element(options[0]).click().perform()
-
-        # Print the selected value
-        selected_value = options[0].text
-        print(f"Selected country: {selected_value}")
+        # Use explicit wait before interacting with each option to avoid stale element issues
+        for option in options:
+            WebDriverWait(driver, 10).until(EC.visibility_of(option))
+            if option.text == "KENYA":  # Replace "KENYA" with the desired option
+                option.click()
+                print(f"Selected country: {option.text}")
+                break
 
     except Exception as e:
         print(f"An error occurred: {e}")
