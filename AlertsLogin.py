@@ -7,9 +7,9 @@ from selenium.webdriver.common.action_chains import ActionChains
 import time
 
 # Replace with actual login credentials
-username = ""
-password = ""
-customer_name = ""
+username = "elvin.opak@smartapplicationsgroup.com"
+password = "Sumova@26"
+customer_name = "TEST CUSTOMER 13"
 
 # Specify the path to the ChromeDriver executable
 chrome_driver_path = "C:/Users/elvin.opak/SeleniumProject/Driver/chromedriver.exe"
@@ -22,7 +22,7 @@ def login_to_application():
 
     try:
         # Open the web application
-        driver.get("")
+        driver.get("https://qa.data.smartapplicationsgroup.com:30489/login")
 
         # Maximize the browser window
         driver.maximize_window()
