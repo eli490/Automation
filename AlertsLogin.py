@@ -21,7 +21,7 @@ def login_to_application():
 
     try:
         # Open the web application
-        driver.get("https://qa.data.smartapplicationsgroup.com:30489/login")
+        driver.get("")
 
         # Maximize the browser window
         driver.maximize_window()
