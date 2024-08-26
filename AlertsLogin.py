@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.common import StaleElementReferenceException
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -20,7 +21,7 @@ def login_to_application():
 
     try:
         # Open the web application
-        driver.get("")
+        driver.get("https://qa.data.smartapplicationsgroup.com:30489/login")
 
         # Maximize the browser window
         driver.maximize_window()
@@ -100,21 +101,21 @@ def login_to_application():
             WebDriverWait(driver, 10).until(EC.visibility_of(option))
             if option.text == "KENYA":  # Replace "KENYA" with the desired option
                 option.click()
-                print(f"Selected country: {option.text}")
                 break
 
-        # Handling the autocomplete input field by focusing on the parent div first
+        # Handle the autocomplete input field by focusing on the parent div first
         for attempt in range(3):  # Retry up to 3 times
             try:
                 # Locate the parent div
                 parent_div = WebDriverWait(driver, 50).until(
                     EC.visibility_of_element_located(
-                        (By.XPATH, "//div[contains(@class, 'mud-input mud-select-input')]"))
+                        (By.XPATH, "//div[contains(@class, 'mud-input-slot mud-input-root mud-input-root-outlined "
+                                   "mud-input-root-adorned-end mud-select-input')]"))
                 )
 
                 # Then locate the specific input within that div
-                autocomplete_input = parent_div.find_element(By.XPATH, ".//input[@type='text']")
-                autocomplete_input.send_keys("TEST CUSTOMER 13")
+                autocomplete_input = parent_div.find_element(By.XPATH, "//input[@type='text']")
+                autocomplete_input.send_keys("SAMPLE SCHEME")
 
                 # Wait for the autocomplete suggestions to appear
                 suggestions = WebDriverWait(driver, 50).until(
@@ -129,12 +130,11 @@ def login_to_application():
                 for suggestion in suggestions:
                     if "TEST CUSTOMER 13" in suggestion.text:  # Replace with the desired suggestion
                         suggestion.click()
-                        print(f"Selected customer: {suggestion.text}")
                         break
 
                 break  # Break the loop if no exception occurs
 
-            except Exception as e:
+            except StaleElementReferenceException as e:
                 print(f"Retrying due to stale element reference: {e}")
                 time.sleep(2)  # Wait a bit before retrying
 
