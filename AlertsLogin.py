@@ -128,7 +128,7 @@ def login_to_application():
 
                 # Select the desired suggestion
                 for suggestion in suggestions:
-                    if "TEST CUSTOMER 13" in suggestion.text:  # Replace with the desired suggestion
+                    if "SAMPLE SCHEME" in suggestion.text:  # Replace with the desired suggestion
                         suggestion.click()
                         break
 
