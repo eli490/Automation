@@ -4,11 +4,13 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+import traceback
 import time
 
 # Replace with actual login credentials
 username = ""
 password = ""
+max_alert_amount = ""
 
 # Specify the path to the ChromeDriver executable
 chrome_driver_path = "C:/Users/elvin.opak/SeleniumProject/Driver/chromedriver.exe"
@@ -138,11 +140,28 @@ def login_to_application():
                 print(f"Retrying due to stale element reference: {e}")
                 time.sleep(2)  # Wait a bit before retrying
 
+        # Locate the div containing the Maximum Alert Amount field
+        max_alert_div = WebDriverWait(driver, 50).until(
+            EC.visibility_of_element_located((By.XPATH, "//div[contains(@class, 'mud-input mud-input-outlined "
+                                                        "mud-shrink')]"))
+        )
+
+        # Locate the input field within the div and enter the amount
+        max_alert_amount_field = max_alert_div.find_element(By.XPATH, "//input[contains(@class, 'mud-input-slot "
+                                                                      "mud-input-root mud-input-root-outlined')]")
+        max_alert_amount_field.send_keys()  # Replace "5000" with the desired amount
+
+        # Print a success message
+        print("Successfully entered the Maximum Alert Amount.")
+
     except Exception as e:
         print(f"An error occurred: {e}")
+
+        traceback.print_exc()
+
     finally:
         # Wait for a few seconds before closing to observe the result
-        time.sleep(60)
+        time.sleep(20)
         driver.quit()
 
 
