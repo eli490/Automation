@@ -75,7 +75,7 @@ def login_to_application():
         )
         create_new_button.click()
 
-        # Selecting a dropdown that contains a list of countries
+        # Selecting the dropdown that contains a list of countries
         dropdown_option = WebDriverWait(driver, 50).until(
             EC.element_to_be_clickable((By.XPATH, "//*[@type='text' and contains(@class, 'mud-input-slot')]"))
         )
@@ -103,33 +103,40 @@ def login_to_application():
                 print(f"Selected country: {option.text}")
                 break
 
-        # Select a customer from the autocomplete field
-        # Locate the autocomplete input field using a unique combination of attributes
-        autocomplete_input = WebDriverWait(driver, 50).until(
-            EC.element_to_be_clickable((By.XPATH, "//input[@autocomplete='mud-disabled-f2c6a153-50e0-4a25-bf84"
-                                                  "-6d5b657a19f9']"))
-        )
-        autocomplete_input.send_keys("TEST CUSTOMER 13")  # Replace with the partial name or input you want to
-        # search for
+        # Handling the autocomplete input field by focusing on the parent div first
+        for attempt in range(3):  # Retry up to 3 times
+            try:
+                # Locate the parent div
+                parent_div = WebDriverWait(driver, 50).until(
+                    EC.visibility_of_element_located(
+                        (By.XPATH, "//div[contains(@class, 'mud-input mud-select-input')]"))
+                )
 
-        # Wait for the autocomplete suggestions to appear
-        suggestions = WebDriverWait(driver, 50).until(
-            EC.presence_of_all_elements_located((By.XPATH, "//input[contains(@class, "
-                                                           "'mud-disabled-2783efe2-ecb0-4ad0-b6b3-1fcbebc7a93a')]"))
-            # Update with
-            # correct class or XPATH
-        )
+                # Then locate the specific input within that div
+                autocomplete_input = parent_div.find_element(By.XPATH, ".//input[@type='text']")
+                autocomplete_input.send_keys("TEST CUSTOMER 13")
 
-        # Print out all available suggestions
-        for suggestion in suggestions:
-            print("Suggestion:", suggestion.text)
+                # Wait for the autocomplete suggestions to appear
+                suggestions = WebDriverWait(driver, 50).until(
+                    EC.presence_of_all_elements_located((By.XPATH, "//div[contains(@class, 'mud-list-item-text')]"))
+                )
 
-        # Select the desired suggestion
-        for suggestion in suggestions:
-            if "TEST CUSTOMER 13" in suggestion.text:  # Replace with the desired suggestion
-                suggestion.click()
-                print(f"Selected customer: {suggestion.text}")
-                break
+                # Print out all available suggestions
+                for suggestion in suggestions:
+                    print("Suggestion:", suggestion.text)
+
+                # Select the desired suggestion
+                for suggestion in suggestions:
+                    if "TEST CUSTOMER 13" in suggestion.text:  # Replace with the desired suggestion
+                        suggestion.click()
+                        print(f"Selected customer: {suggestion.text}")
+                        break
+
+                break  # Break the loop if no exception occurs
+
+            except Exception as e:
+                print(f"Retrying due to stale element reference: {e}")
+                time.sleep(2)  # Wait a bit before retrying
 
     except Exception as e:
         print(f"An error occurred: {e}")
