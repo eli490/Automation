@@ -11,6 +11,7 @@ import traceback
 username = ""
 password = ""
 max_alert_amount = ""
+max_claim_alert_amount = ""
 
 # Specify the path to the ChromeDriver executable
 chrome_driver_path = "C:/Users/elvin.opak/SeleniumProject/Driver/chromedriver.exe"
@@ -111,7 +112,8 @@ def login_to_application():
                 parent_div = WebDriverWait(driver, 50).until(
                     EC.visibility_of_element_located(
                         (By.XPATH, "//div[contains(@class, 'mud-input mud-input-outlined mud-input-adorned-end "
-                                   "mud-select-input')]"))
+                                   "mud-select-input')]")
+                    )
                 )
 
                 # Then locate the specific input within that div
@@ -143,14 +145,10 @@ def login_to_application():
         try:
             print("Attempting to locate the Maximum Alert Amount field...")
 
-            # Locate the label for "Maximum Alert Amount"
-            max_alert_label = WebDriverWait(driver, 50).until(
-                EC.visibility_of_element_located((By.XPATH, "//label[contains(text(), 'Maximum Alert Amount')]"))
-            )
-
-            # Locate the input field using its label
-            max_alert_amount_field = max_alert_label.find_element(
-                By.XPATH, "//input[@class='mud-input-slot mud-input-root mud-input-root-outlined' and @type='text']"
+            # Locate the input field for Maximum Alert Amount by indexing it directly
+            max_alert_amount_field = WebDriverWait(driver, 50).until(
+                EC.visibility_of_element_located((By.XPATH, "(//input[@class='mud-input-slot mud-input-root "
+                                                            "mud-input-root-outlined' and @type='text'])[1]"))
             )
 
             # Scroll to the element to make sure it's in view
@@ -159,15 +157,39 @@ def login_to_application():
 
             # Ensure the element is clickable before interaction
             max_alert_amount_field = WebDriverWait(driver, 50).until(
-                EC.element_to_be_clickable((By.XPATH, "//input[@class='mud-input-slot mud-input-root "
-                                                      "mud-input-root-outlined' and @type='text']"))
+                EC.element_to_be_clickable((By.XPATH, "(//input[@class='mud-input-slot mud-input-root "
+                                                      "mud-input-root-outlined' and @type='text'])[1]"))
             )
+
+            # Clear the field before entering the amount
+            max_alert_amount_field.clear()
             max_alert_amount_field.send_keys(max_alert_amount)
             print("Successfully entered the Maximum Alert Amount.")
 
+            # Locate the input field for Maximum Claim Amount by indexing it directly
+            max_claim_alert_field = WebDriverWait(driver, 50).until(
+                EC.visibility_of_element_located((By.XPATH, "(//input[@class='mud-input-slot mud-input-root "
+                                                            "mud-input-root-outlined' and @type='text'])[2]"))
+            )
+
+            # Scroll to the element to make sure it's in view
+            driver.execute_script("arguments[0].scrollIntoView(true);", max_claim_alert_field)
+            time.sleep(2)  # Give some time for the scrolling
+
+            # Ensure the element is clickable before interaction
+            max_claim_alert_field = WebDriverWait(driver, 50).until(
+                EC.element_to_be_clickable((By.XPATH, "(//input[@class='mud-input-slot mud-input-root "
+                                                      "mud-input-root-outlined' and @type='text'])[2]"))
+            )
+
+            # Clear the field before entering the amount
+            max_claim_alert_field.clear()
+            max_claim_alert_field.send_keys(max_claim_alert_amount)
+            print("Successfully entered the Maximum Claim Amount.")
+
         except (TimeoutException, ElementNotInteractableException):
-            print("Failed to locate or interact with the Maximum Alert Amount field. Please check the XPath or "
-                  "element visibility.")
+            print("Failed to locate or interact with the Maximum Alert Amount or Maximum Claim Amount fields. Please "
+                  "check the XPath or element visibility.")
             traceback.print_exc()
 
     except Exception as e:
