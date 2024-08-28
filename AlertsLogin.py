@@ -1,11 +1,11 @@
 from selenium import webdriver
-from selenium.common import StaleElementReferenceException
+from selenium.common.exceptions import ElementNotInteractableException, TimeoutException, StaleElementReferenceException
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-import traceback
 import time
+import traceback
 
 # Replace with actual login credentials
 username = ""
@@ -47,17 +47,16 @@ def login_to_application():
         # Wait for the welcome message to appear
         WebDriverWait(driver, 50).until(
             EC.visibility_of_element_located(
-                (By.XPATH,
-                 "//*[contains(text(), 'Welcome to the Alerts Portal, Please proceed to the different pages')]")
+                (By.XPATH, "//*[contains(text(), 'Welcome to the Alerts Portal, Please proceed to the different "
+                           "pages')]")
             )
         )
 
         # Wait for the hamburger button to be visible and clickable using its class
         hamburger_button = WebDriverWait(driver, 50).until(
-            EC.element_to_be_clickable((By.XPATH,
-                                        "//*[@type='button' and contains(@class, 'mud-button-root mud-icon-button "
-                                        "mud-inherit-text hover:mud-inherit-hover mud-ripple mud-ripple-icon "
-                                        "mud-icon-button-edge-start')]"))
+            EC.element_to_be_clickable((By.XPATH, "//*[@type='button' and contains(@class, 'mud-button-root "
+                                                  "mud-icon-button mud-inherit-text hover:mud-inherit-hover "
+                                                  "mud-ripple mud-ripple-icon mud-icon-button-edge-start')]"))
         )
         hamburger_button.click()
 
@@ -108,11 +107,11 @@ def login_to_application():
         # Handle the autocomplete input field by focusing on the parent div first
         for attempt in range(3):  # Retry up to 3 times
             try:
-                # Locate the parent div
+                # Locate the parent div for the autocomplete field
                 parent_div = WebDriverWait(driver, 50).until(
                     EC.visibility_of_element_located(
-                        (By.XPATH, "//div[contains(@class, 'mud-input-slot mud-input-root mud-input-root-outlined "
-                                   "mud-input-root-adorned-end mud-select-input')]"))
+                        (By.XPATH, "//div[contains(@class, 'mud-input mud-input-outlined mud-input-adorned-end "
+                                   "mud-select-input')]"))
                 )
 
                 # Then locate the specific input within that div
@@ -138,25 +137,41 @@ def login_to_application():
 
             except StaleElementReferenceException as e:
                 print(f"Retrying due to stale element reference: {e}")
-                time.sleep(2)  # Wait a bit before retrying
+                time.sleep(0)  # Wait a bit before retrying
 
-        # Locate the div containing the Maximum Alert Amount field
-        max_alert_div = WebDriverWait(driver, 50).until(
-            EC.visibility_of_element_located((By.XPATH, "//div[contains(@class, 'mud-input mud-input-outlined "
-                                                        "mud-shrink')]"))
-        )
+        # After selecting the customer, locate the Maximum Alert Amount field
+        try:
+            print("Attempting to locate the Maximum Alert Amount field...")
 
-        # Locate the input field within the div and enter the amount
-        max_alert_amount_field = max_alert_div.find_element(By.XPATH, "//input[contains(@class, 'mud-input-slot "
-                                                                      "mud-input-root mud-input-root-outlined')]")
-        max_alert_amount_field.send_keys()  # Replace "5000" with the desired amount
+            # Locate the label for "Maximum Alert Amount"
+            max_alert_label = WebDriverWait(driver, 50).until(
+                EC.visibility_of_element_located((By.XPATH, "//label[contains(text(), 'Maximum Alert Amount')]"))
+            )
 
-        # Print a success message
-        print("Successfully entered the Maximum Alert Amount.")
+            # Locate the input field using its label
+            max_alert_amount_field = max_alert_label.find_element(
+                By.XPATH, "//input[@class='mud-input-slot mud-input-root mud-input-root-outlined' and @type='text']"
+            )
+
+            # Scroll to the element to make sure it's in view
+            driver.execute_script("arguments[0].scrollIntoView(true);", max_alert_amount_field)
+            time.sleep(2)  # Give some time for the scrolling
+
+            # Ensure the element is clickable before interaction
+            max_alert_amount_field = WebDriverWait(driver, 50).until(
+                EC.element_to_be_clickable((By.XPATH, "//input[@class='mud-input-slot mud-input-root "
+                                                      "mud-input-root-outlined' and @type='text']"))
+            )
+            max_alert_amount_field.send_keys(max_alert_amount)
+            print("Successfully entered the Maximum Alert Amount.")
+
+        except (TimeoutException, ElementNotInteractableException):
+            print("Failed to locate or interact with the Maximum Alert Amount field. Please check the XPath or "
+                  "element visibility.")
+            traceback.print_exc()
 
     except Exception as e:
         print(f"An error occurred: {e}")
-
         traceback.print_exc()
 
     finally:
