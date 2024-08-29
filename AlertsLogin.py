@@ -12,6 +12,7 @@ username = ""
 password = ""
 max_alert_amount = ""
 max_claim_alert_amount = ""
+email_to_add = ""  # Replace with the actual email
 
 # Specify the path to the ChromeDriver executable
 chrome_driver_path = "C:/Users/elvin.opak/SeleniumProject/Driver/chromedriver.exe"
@@ -187,9 +188,34 @@ def login_to_application():
             max_claim_alert_field.send_keys(max_claim_alert_amount)
             print("Successfully entered the Maximum Claim Amount.")
 
+            # Locate the Enter Email field
+            email_field = WebDriverWait(driver, 50).until(
+                EC.visibility_of_element_located((By.XPATH, "(//input[@class='mud-input-slot mud-input-root "
+                                                            "mud-input-root-outlined' and @type='text'])[3]"))
+            )
+            email_field.clear()
+            email_field.send_keys(email_to_add)
+
+            # Locate and click the Add button
+            add_button = WebDriverWait(driver, 50).until(
+                EC.element_to_be_clickable((By.XPATH, "//button[normalize-space()='Add Email']"))
+            )
+            add_button.click()
+            print("Successfully added the email.")
+
+            # Wait for 2 seconds before submitting the form
+            time.sleep(2)
+
+            # Locate and click the Submit button
+            submit_button = WebDriverWait(driver, 50).until(
+                EC.element_to_be_clickable((By.XPATH, "//button[normalize-space()='Submit Form']"))
+            )
+            submit_button.click()
+            print("Successfully clicked the Submit button.")
+
         except (TimeoutException, ElementNotInteractableException):
-            print("Failed to locate or interact with the Maximum Alert Amount or Maximum Claim Amount fields. Please "
-                  "check the XPath or element visibility.")
+            print("Failed to locate or interact with the Maximum Alert Amount, Maximum Claim Amount, Enter Email "
+                  "fields, or Add button. Please check the XPath or element visibility.")
             traceback.print_exc()
 
     except Exception as e:
@@ -198,7 +224,7 @@ def login_to_application():
 
     finally:
         # Wait for a few seconds before closing to observe the result
-        time.sleep(20)
+        time.sleep(2)
         driver.quit()
 
 
