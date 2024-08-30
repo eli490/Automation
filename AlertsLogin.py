@@ -12,7 +12,7 @@ username = ""
 password = ""
 max_alert_amount = ""
 max_claim_alert_amount = ""
-email_to_add = "masosoelvin@gmail.com"  # Replace with the actual email
+email_to_add = ""  # Replace with the actual email
 
 # Specify the path to the ChromeDriver executable
 chrome_driver_path = "C:/Users/elvin.opak/SeleniumProject/Driver/chromedriver.exe"
