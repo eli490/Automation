@@ -6,9 +6,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 import time
 
 # Replace with actual registration details
-first_name = ""
-last_name = ""
-username = ""
+first_name = "_"
+last_name = "_"
+username = "_"
 email = ""
 password = ""
 confirm_password = password  # Should match the password
