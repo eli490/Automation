@@ -10,8 +10,8 @@ import traceback
 # Replace with actual login credentials
 username = ""
 password = ""
-max_alert_amount = "1000"
-max_claim_alert_amount = "1000"
+max_alert_amount = ""
+max_claim_alert_amount = ""
 email_to_add = ""  # Replace with the actual email
 
 # Specify the path to the ChromeDriver executable
